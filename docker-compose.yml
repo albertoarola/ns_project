@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  server:
+    image: server_image
+    networks:
+      server_network:
+        ipv4_address: 172.20.0.3
+    container_name: server_container
+    stdin_open: true
+    cap_add:
+      - ALL
+        
+            
+  client:
+    image: client_image
+    networks:
+      external_network:
+        ipv4_address: 172.21.0.4
+    container_name: client_container
+    stdin_open: true
+    cap_add:
+      - ALL  
+      
+          
+  kali:
+    image: kali_image
+    networks:
+      external_network:
+        ipv4_address: 172.21.0.3
+    container_name: kali_container
+    stdin_open: true
+    cap_add:
+      - ALL  
+     
+  firewall:
+    image: firewall_image
+    networks:
+      server_network:
+        ipv4_address: 172.20.0.2
+      external_network:
+        ipv4_address: 172.21.0.2
+    container_name: firewall_container
+    stdin_open: true
+    cap_add:
+      - ALL
+
+networks:
+  server_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+  external_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
